@@ -249,7 +249,7 @@ if not st.session_state.intro_watched:
     st.markdown("""
     <div style="background: linear-gradient(135deg, #181042 0%, #291b66 100%); border: 2px solid #0ea5e9; border-radius: 16px; padding: 2rem; margin-bottom: 2.5rem; box-shadow: 0 10px 30px rgba(14, 165, 233, 0.25);">
         <h3 style="color: #ffffff; margin-top: 0; font-size: 1.5rem;">🫀 Biomimetic Intelligence Preview</h3>
-        <p style="color: #38bdf8; font-size: 0.95rem; margin-bottom: 1rem;">AI, Physiology, and Biomimetics in Cardiac Research — Inspired by Nature, Engineered by AI.</p>
+        <p style="color: #38bdf8; font-size: 0.95rem; margin-bottom: 1rem;">AI, Physiology, and Biomimetics in Cardiac Research : Inspired by Nature, Engineered by AI.</p>
     </div>
     """, unsafe_allow_html=True)
     
