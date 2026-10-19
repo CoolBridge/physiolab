@@ -1,0 +1,11 @@
+streamlit>=1.40
+numpy
+scipy
+pandas
+plotly
+neurokit2
+mne
+pydicom>=2.4
+pillow
+pytest
+
