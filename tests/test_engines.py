@@ -100,3 +100,34 @@ def test_intervals_hidden_by_default():
     _, s, _ = simulate_ecg()
     m = ecg.analyse(s, 250)[0].measurements
     assert "qrs_ms" not in m and "qt_ms" not in m
+
+def test_eeg_simulator_alpha_blocking_and_artefacts():
+    from physiolab import teaching as T
+    def alpha(**kw):
+        _, d, n, _ = T.simulate_eeg(**kw)
+        return eeg.analyse(d, 250, n).measurements["global_relative_power"]["alpha"]
+    assert alpha(eyes="closed") > alpha(eyes="open") + 0.2
+    _, d, n, _ = T.simulate_eeg(flat_channel=True)
+    assert eeg.analyse(d, 250, n).quality["flagged_channels"] == ["Fp2"]
+    _, d, n, _ = T.simulate_eeg(mains=20)
+    assert len(eeg.analyse(d, 250, n).quality["flagged_channels"]) >= 5
+
+
+def test_eeg_dominant_band_exercise_is_decodable():
+    from physiolab import teaching as T
+    for band in ("delta", "theta", "alpha", "beta"):
+        amps = {b: 5.0 for b in ("delta", "theta", "alpha", "beta")}; amps[band] = 30.0
+        _, d, n, _ = T.simulate_eeg(amps=amps, alpha_posterior_only=False)
+        g = eeg.analyse(d, 250, n).measurements["global_relative_power"]
+        assert max(g, key=g.get) == band
+
+
+def test_echo_simulator_measurement_matches_truth():
+    from physiolab import teaching as T
+    for d, s, mm in [(48, 32, 0.4), (56, 24, 0.6), (40, 26, 0.3)]:
+        frames, truth = T.simulate_echo(d, s, mm)
+        for f, true in zip(frames, (d, s)):
+            x0, x1 = T.cavity_extent_px(f)
+            assert abs((x1 - x0 + 1) * mm - true) <= 1.5 * mm + 0.5
+    assert T.echo_fs(50, 30) == 40.0
+    assert T.check_within(58.0, 58.3, 1.0)["within_tolerance"]    

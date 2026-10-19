@@ -9,4 +9,5 @@ pydicom>=2.4
 pillow
 pytest
 supabase
+wfdb>=4.1.0
 
