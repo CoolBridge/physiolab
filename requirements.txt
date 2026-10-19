@@ -8,4 +8,4 @@ mne
 pydicom>=2.4
 pillow
 pytest
-
+supabase
